@@ -39,6 +39,7 @@ class Turret(pg.sprite.Sprite):
         self.image = pg.transform.rotate(self.original_image, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
+        
 
         # range image
         self.range_image = pg.Surface((self.reach*2, self.reach*2))
