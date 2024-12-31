@@ -4,17 +4,20 @@ import math
 from importlib import reload
 
 class Turret(pg.sprite.Sprite):
-    def __init__(self, tile_x, tile_y, turret_data):
+    def __init__(self, tile_x, tile_y, turret_data, level = 1, target_type = None):
         pg.sprite.Sprite.__init__(self)
         # Stats Variables
-        self.level = 1
+        self.level = level
         self.turret_data = turret_data
         self.upgrade_cost = self.turret_data['level'][self.level-1].get('cost')
         self.cooldown = self.turret_data['level'][self.level-1].get('cooldown')
         self.reach = self.turret_data['level'][self.level-1].get('reach')
         self.damage = self.turret_data['level'][self.level-1].get('damage')
         
-        self.target_type = self.turret_data['target_type']
+        if target_type:
+            self.target_type = target_type
+        else:
+            self.target_type = self.turret_data['target_type']
         self.target_types = ['default', 'weak', 'strong', 'slow', 'fast']
         self.max_level = len(self.turret_data['level'])
         self.selected = False
@@ -87,18 +90,21 @@ class Turret(pg.sprite.Sprite):
             print('It is at max level already')
 
     def play_animation(self, world):
-        self.original_image = self.animation_images[self.frame_index]
-        if pg.time.get_ticks() - self.update_time > c.ANIMATION_DELAY/world.game_speed:
-            self.frame_index = self.frame_index + 1
+        if pg.time.get_ticks() - self.update_time > c.ANIMATION_DELAY:
+            self.frame_index = self.frame_index + int(world.game_speed)
             self.update_time = pg.time.get_ticks()
-            
         if self.frame_index >= c.ANIMATION_STEPS:
             self.frame_index = 0
             self.last_shot = pg.time.get_ticks()
             self.target = None
-
+        self.original_image = self.animation_images[self.frame_index]
+        
     def draw(self, screen):
         self.image = pg.transform.rotate(self.original_image, self.angle-90)
+        if self.turret_data['turret_type'] == 'emp':
+            self.image = pg.transform.smoothscale_by(self.image, 0.6)
+        else:
+            self.image = pg.transform.smoothscale_by(self.image, 0.85)
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
         
@@ -149,6 +155,10 @@ class Turret(pg.sprite.Sprite):
     def change_target_type(self):
         if not self.target_type == 'all':
             self.target_type = self.target_types[(self.target_types.index(self.target_type) + 1) % len(self.target_types)]
+
+    def to_dict(self):
+        return {'tile_x':self.tile_x, 'tile_y':self.tile_y, 'turret_type':self.turret_data['turret_type'], 'level':self.level,
+               'target_type':self.target_type}
 
 
 

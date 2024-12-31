@@ -1,0 +1,22 @@
+# Each Dictionary in the list is a level
+# Each list says how many of each level and guy you want (No more than 4 levels currently, can add more)
+# Curret enemies are: regular, dash, strong, speed, armored, and constant
+{
+    'name':'Stage Data 1',
+'spawn_data':[
+    {'regular':[15]}, #1
+    {'dash':[20]}, #1
+    {'strong':[20]}, #1
+    {'regular':[0,5], 'speed':[25]}, #1
+    {'constant':[0,10]}, #1
+    {'armored':[30]}, #1
+    {'regular':[15], 'dash':[15], 'speed':[15], 'constant':[15], 'armored':[15], 'strong':[15]}, #1
+    {'regular':[0,5],'dash':[0,5],'speed':[0,5],'constant':[0,5],'armored':[0,5],'strong':[0,5]}, #1
+    {'regular':[0,0,10],'dash':[0,0,15]}, #1
+    {'speed':[0,0,15],'constant':[0,0,10]}, #1
+    {'armored':[0,0,0,10],'strong':[0,0,0,10]}, #1
+],
+    'level_reward':50,
+    'money':1200,
+    'health':50
+}
